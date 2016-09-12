@@ -1,3 +1,4 @@
+
 library('ggplot2')
 
 net <- read.delim("/Users/Chris/Documents/strawberry/ZCL/summary_scores.csv", sep = ",", header = TRUE)
@@ -15,10 +16,10 @@ pval_order <- net[rev(order(net$pval_score)), ]
 
 m <- cbind(net$uniqueGO, net$pval_score)
 colnames(m) <- c("uniqueGO_rank", "pval_rank")
-cor(m[1:50, "uniqueGO_rank"], m[1:50, "pval_rank"], method="kendall", use="pairwise")
+cor(m[, "uniqueGO_rank"], m[, "pval_rank"], method="kendall", use="pairwise")
 
 #top uGO networks
-unique_order[1:10, ]
+unique_order[which(unique_order$merge == 1),]
 #top pvalnetworks
 
 x <- unique_order$norm
@@ -27,3 +28,15 @@ x[x != "lcpm"]
 
 cor(net_hd$merge, net_hd$uniqueGO)
 cor(net_hd$merge, net_hd$pval_score)
+
+
+####--------------------------------------------------------
+####--------------------------------------------------------
+####--------------------------------------------------------
+####--------------------------------------------------------
+
+rownames(net) <- net$network
+
+
+
+
