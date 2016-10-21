@@ -16,9 +16,9 @@ allowWGCNAThreads()
 bams <- read.delim(paste("/cbcb/project-scratch/ZCL/", args[1], "_mapped_reads_tophat/bam_paths.txt", sep = "") ,  sep = "\n", header = FALSE)
 filenames <- as.character(bams$V1)
 
-fc <- featureCounts(files = filenames, annot.ext="/cbcb/lab/smount/ZCL/Fragaria_vesca_v2.0.a1.transcripts.gff3", nthreads=4, isGTFAnnotationFile=FALSE)#, useMetaFeatures=TRUE, GTF.attrType="gene_id", GTF.featureType="CDS")
+fc <- featureCounts(files = filenames, annot.ext="/cbcb/lab/smount/ZCL/Fragaria_vesca_v2.0.a1.transcripts.gtf", nthreads=4, isGTFAnnotationFile=TRUE, useMetaFeatures=TRUE, GTF.attrType="gene_id", GTF.featureType="CDS")
 
-(fc$annotation)
+#(fc$annotation)
 
 # write.csv(fc$counts, file = paste("/cbcb/lab/smount/ZCL/bioconductor_scripts/counts/", args[1], "_counts.csv", sep = ""))
 # write.csv(fc$counts_junction, file = paste("/cbcb/lab/smount/ZCL/bioconductor_scripts/counts/", args[1], "_counts_junction.csv", sep = ""))

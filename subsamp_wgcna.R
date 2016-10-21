@@ -23,16 +23,15 @@ if (length(args) < 7){
 
 filename <- paste(norm_file_dir, norm_file, sep = "")
 
-
 #fail marker
-file.create(paste("/cbcb/project-scratch/ZCL/wgcna/",save_dir, "/failed/", runNum, sep =""))
+file.create(paste("/cbcb/project-scratch/ZCL/wgcna/consensus/",save_dir, "/failed/", runNum, sep =""))
 
-setwd(paste("/cbcb/project-scratch/ZCL/wgcna/",save_dir, sep = ""))
+setwd(paste("/cbcb/project-scratch/ZCL/wgcna/consensus/",save_dir, sep = ""))
 
 #redirect output
-sink(file = paste("output/", runNum, ".txt", sep =""))
+#sink(file = paste(getwd(), "/output/", runNum, ".txt", sep =""))
 
-print(paste("softPower: ", ,sep = ""))
+#print(paste("softPower: ", ,sep = ""))
 
 ##herheherhehrehrhehrehrheherh
 suppressMessages(library("WGCNA"))
@@ -51,6 +50,17 @@ rownames(selection) <- selection[,"X"]
 #remove useless column
 selection[,"X"] <- NULL
 selection[,"X.1"] <- NULL
+
+print(head(selection))
+
+####
+#open gene subsample file and subset names
+####
+
+sub_genes <- read.delim(paste("sub_genes/", gene_sub_list_name, sep = ""), sep = "\n", header = FALSE)
+print(sub_genes$V1)
+selection <- selection[as.character(sub_genes$V1), ]
+print(head(selection))
 
 print(dim(selection))
 #transpose with only number to keep numeric
@@ -91,9 +101,9 @@ table(dynamicColors)
 
 if(l > 200){
 
-        file.remove(paste("/cbcb/project-scratch/ZCL/wgcna/",save_dir, "/failed/", runNum, sep =""))
+        file.remove(paste("/cbcb/project-scratch/ZCL/wgcna/consensus/",save_dir, "/failed/", runNum, sep =""))
         print("too many clusters")
-        file.create(paste("/cbcb/project-scratch/ZCL/wgcna/",save_dir, "/2many/", runNum, sep =""))
+        file.create(paste("/cbcb/project-scratch/ZCL/wgcna/consensus/",save_dir, "/2many/", runNum, sep =""))
 
         quit(save = "no")
 }
@@ -105,7 +115,7 @@ clusters <- clusters[order(clusters$group), ]
 
 
 if (merge_eigengenes == 0){
-  write.csv(clusters , file = paste(norm_file, "_power_", softPower , "_modulesize_", minModuleSize , "_merge_", merge_eigengenes, ".csv", sep =""))
+  write.csv(clusters , file = paste("clusters/", runNum, ".csv", sep =""), row.names = FALSE)
 }
 
 moduleColors <- dynamicColors
@@ -137,15 +147,15 @@ if (merge_eigengenes == 1){
   gene_names <- rownames(adjacency_res)
   mclusters <- as.data.frame(cbind(genes= gene_names, group = mergedColors))
   mclusters <- mclusters[order(mclusters$group), ]
-  write.csv(mclusters , file = paste(norm_file, "_power_", softPower , "_modulesize_", minModuleSize , "_merge_", merge_eigengenes, ".csv", sep =""))
+  write.csv(mclusters , file = paste("clusters/", runNum, ".csv", sep =""), row.names = FALSE)
 }
-}
+
 
 print("complete")
 
 #stop output redirection
-sink()
+#sink()
 
-file.remove(paste("/cbcb/project-scratch/ZCL/wgcna/",save_dir,"/failed/",runNum, sep =""))
-file.create(paste("/cbcb/project-scratch/ZCL/wgcna/",save_dir, "/success/",runNum,sep =""))
+file.remove(paste("/cbcb/project-scratch/ZCL/wgcna/consensus/",save_dir,"/failed/",runNum, sep =""))
+file.create(paste("/cbcb/project-scratch/ZCL/wgcna/consensus/",save_dir, "/success/",runNum,sep =""))
 
